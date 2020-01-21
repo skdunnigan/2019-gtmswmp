@@ -72,6 +72,14 @@ df_wq <- dplyr::bind_rows(df_wq_pi, df_wq_ss, df_wq_fm, df_wq_pc)
 # remove individual stations df
 rm(df_wq_pi, df_wq_ss, df_wq_fm, df_wq_pc)
 
+# make sure station_name is ordered
+df_wq$station_name <- as.factor(df_wq$station_name)
+df_wq$station_name <- factor(df_wq$station_name, 
+                             levels = c("gtmpiwq",
+                                        "gtmsswq",
+                                        "gtmfmwq",
+                                        "gtmpcwq")
+)
 
 # ----03 LOAD biomonitoring vegetation data----
 df_veg <- readxl::read_xlsx(here::here('data', '2019VEG_raw.xlsx')) %>% 
@@ -99,7 +107,7 @@ swmp_wq <- bind_cols("gtmpiwq" = gtmpiwq,
                      "gtmsswq" = gtmsswq,
                      "gtmfmwq" = gtmfmwq,
                      "gtmpcwq" = gtmpcwq) %>%
-  gather(key = "swmp_wq", value = "site_id")
+  gather(key = "station_name", value = "site_id")
 
 # remove the vectors, we don't need them
 rm(gtmpiwq, gtmsswq, gtmfmwq, gtmpcwq)
@@ -110,3 +118,22 @@ df3_veg <- merge(df2_veg, swmp_wq, by="site_id", all.x=TRUE)
 df_veg <- df3_veg
 
 rm(df2_veg, df3_veg, swmp_wq)
+
+# make sure site_id is ordered
+df_veg$site_id <- as.factor(df_veg$site_id)
+df_veg$site_id <- factor(df_veg$site_id, 
+                         levels = c("40",
+                                    "00",
+                                    "22",
+                                    "06",
+                                    "46",
+                                    "01")
+                         )
+# make sure station_name is ordered
+df_veg$station_name <- as.factor(df_veg$station_name)
+df_veg$station_name <- factor(df_veg$station_name, 
+                             levels = c("gtmpiwq",
+                                        "gtmsswq",
+                                        "gtmfmwq",
+                                        "gtmpcwq")
+)
