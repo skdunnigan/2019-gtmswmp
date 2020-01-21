@@ -84,3 +84,27 @@ df2_veg <- df_veg %>%
                 canopy_height_m = canopy_height_16) %>%
   dplyr::select(date, site_id, transect_id, plot_id, distance, elevation,
                 species, percent_cover, canopy_height_m, density_adj)
+
+# create column that groups sites based on proximity to SWMP WQ stations
+# first make vectors for each site
+gtmpiwq <- c("40", "00")
+gtmsswq <- c("22", NA)
+gtmfmwq <- c("01", "06")
+gtmpcwq <- c("46", NA)
+
+# bind the vectors into a data frame
+swmp_wq <- bind_cols("gtmpiwq" = gtmpiwq, 
+                     "gtmsswq" = gtmsswq,
+                     "gtmfmwq" = gtmfmwq,
+                     "gtmpcwq" = gtmpcwq) %>%
+  gather(key = "swmp_wq", value = "site_id")
+
+# remove the vectors, we don't need them
+rm(gtmpiwq, gtmsswq, gtmfmwq, gtmpcwq)
+
+# merge site names with dataframe
+df3_veg <- merge(df2_veg, swmp_wq, by="site_id", all.x=TRUE)
+
+df_veg <- df3_veg
+
+rm(df2_veg, df3_veg, swmp_wq)
