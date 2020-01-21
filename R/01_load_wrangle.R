@@ -78,10 +78,12 @@ df_veg <- readxl::read_xlsx(here::here('data', '2019VEG_raw.xlsx')) %>%
                               janitor::clean_names()
 
 # edit column names
+# remove entries for 'Distichlis spicata' because we don't have it in plots
 # remove unnecessary columns
 df2_veg <- df_veg %>%
   dplyr::rename(canopy_height_cm = canopy_height_15,
                 canopy_height_m = canopy_height_16) %>%
+  dplyr::filter(species != "Distichlis spicata") %>%
   dplyr::select(date, site_id, transect_id, plot_id, distance, elevation,
                 species, percent_cover, canopy_height_m, density_adj)
 
