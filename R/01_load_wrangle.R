@@ -45,6 +45,17 @@ df_nut <- df2_nut
 # remove data frames
 rm(names, df2_nut)
 
+# make sure station_name is ordered
+df_nut$station_code <- as.factor(df_nut$station_code)
+df_nut$station_code <- factor(df_nut$station_code, 
+                              levels = c("gtmpinut",
+                                         "gtmssnut",
+                                         "gtmfmnut",
+                                         "gtmpcnut")
+)
+
+
+
 #----02 LOAD water quality data ----
 df_wq_pi <- SWMPr::import_local(here::here('data', '837846.zip'), 'gtmpiwq')
 df_wq_ss <- SWMPr::import_local(here::here('data', '837846.zip'), 'gtmsswq')
@@ -93,7 +104,8 @@ df2_veg <- df_veg %>%
                 canopy_height_m = canopy_height_16) %>%
   dplyr::filter(species != "Distichlis spicata") %>%
   dplyr::select(date, site_id, transect_id, plot_id, distance, elevation,
-                species, percent_cover, canopy_height_m, density_adj)
+                species, percent_cover, canopy_height_m, density_adj) 
+  
 
 # create column that groups sites based on proximity to SWMP WQ stations
 # first make vectors for each site
