@@ -104,7 +104,9 @@ df2_veg <- df_veg %>%
                 canopy_height_m = canopy_height_16) %>%
   dplyr::filter(species != "Distichlis spicata") %>%
   dplyr::select(date, site_id, transect_id, plot_id, distance, elevation,
-                species, percent_cover, canopy_height_m, density_adj) 
+                species, percent_cover, canopy_height_m, density_adj) %>%
+  dplyr::mutate(elevation = as.numeric(elevation), 
+                percent_cover = as.numeric(percent_cover))
   
 
 # create column that groups sites based on proximity to SWMP WQ stations
@@ -149,3 +151,8 @@ df_veg$station_name <- factor(df_veg$station_name,
                                         "gtmfmwq",
                                         "gtmpcwq")
 )
+
+# need to remove all plots in site 06 that are not 1-5
+df2_veg <- df_veg %>%
+  dplyr::mutate(plot_id = as.numeric(plot_id)) %>%
+  dplyr::filter(plot_id < 6)
