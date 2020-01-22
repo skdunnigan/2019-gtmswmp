@@ -19,11 +19,8 @@ speciescolours <- c(
 )
 
 # average all plots together
-df2_veg %>%
-  dplyr::mutate(month = lubridate::month(date),
-                season = ifelse(month >4, "fall", "spring"),
-                season = as.factor(season),
-                season = factor(season, levels = c("spring", "fall"))) %>%
+df_veg %>%
+  dplyr::filter(year == 2019) %>%
   dplyr::group_by(season, site_id, species) %>%
   dplyr::summarise(mean_pc = mean(percent_cover, na.rm = TRUE)) %>%
   ggplot() +
