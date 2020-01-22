@@ -1,5 +1,5 @@
 
-# ----01 LOAD nutrient data----
+# ----01 LOAD nutrient data-------------------------------------------------------
 
 # load GTMNERR SWMP nutrient dataset
 # load file with CDMO SWMP names
@@ -56,7 +56,7 @@ df_nut$station_code <- factor(df_nut$station_code,
 
 
 
-#----02 LOAD water quality data ----
+# ----02 LOAD water quality data ------------------------------------------------------
 df_wq_pi <- SWMPr::import_local(here::here('data', '837846.zip'), 'gtmpiwq')
 df_wq_ss <- SWMPr::import_local(here::here('data', '837846.zip'), 'gtmsswq')
 df_wq_fm <- SWMPr::import_local(here::here('data', '837846.zip'), 'gtmfmwq')
@@ -92,9 +92,73 @@ df_wq$station_name <- factor(df_wq$station_name,
                                         "gtmpcwq")
 )
 
-# ----03 LOAD biomonitoring vegetation data----
+# ----03 LOAD biomonitoring vegetation data--------------------------------------------
+
+# read in 2019 data
 df_veg <- readxl::read_xlsx(here::here('data', '2019VEG_raw.xlsx')) %>% 
                               janitor::clean_names()
+
+# rename canopy height columns
+# add calculated percent cover column (blank)
+# reformat date, and add year column
+# add in season
+# make subplot a character
+df2_veg <- df_veg %>%
+  dplyr::rename(canopy_height_cm = canopy_height_15,
+                canopy_height_m = canopy_height_16) %>%
+  dplyr::mutate(percent_cover_cal = NA,
+                date = lubridate::date(date),
+                year = lubridate::year(date),
+                month = lubridate::month(date),
+                season = ifelse(month >4, "Fall", "Spring"),
+                season = factor(season, levels = c("Spring", "Fall")),
+                site_id = factor(site_id, levels = c("40", 
+                                                     "00", 
+                                                     "22", 
+                                                     "06", 
+                                                     "46", 
+                                                     "01")),
+                subplot = as.character(subplot))
+
+# read in previous data 2012-2018
+df_vegold <- read.csv(here::here('data', '2012-2018_VEGMaster.csv'), 
+                      stringsAsFactors = FALSE) %>%
+  janitor::clean_names()
+
+# rename the percent cover columns
+# create new columns for canopy height in cm, reserve, month, and type, that are in 2019
+# reconfigure columns (date, year, season)
+# make subplot a character
+df2_vegold <- df_vegold %>%
+  dplyr::rename(percent_cover = x_cover,
+                percent_cover_cal = calc_cover) %>%
+  dplyr::mutate(canopy_height_cm = canopy_height_m*100,
+                reserve = "GTM",
+                type = "E",
+                date = as.Date(date, "%m/%e/%Y"),
+                year = lubridate::year(date),
+                month = lubridate::month(date),
+                season = factor(season, levels = c("Spring", "Fall")),
+                site_id = factor(site_id, levels = c("40", 
+                                                     "00", 
+                                                     "22", 
+                                                     "06", 
+                                                     "46", 
+                                                     "01")),
+                subplot = as.character(subplot))
+
+# re-class multiple columns in both data frames to numeric
+cols.num <- c("percent_cover", "percent_cover_cal", "elevation", "plot_id",
+              "canopy_height_cm", "canopy_height_m", "density_raw", "density_adj",
+              "lg_burrow_raw", "lg_burrow_adj", "sm_burrow_raw", 
+              "sm_burrow_adj", "diameter", "height")
+df2_veg[cols.num] <- sapply(df2_veg[cols.num], as.numeric)
+df2_vegold[cols.num] <- sapply(df2_vegold[cols.num], as.numeric)
+
+rm(cols.num)
+
+# combine data into one
+df_veg_all <- dplyr::bind_rows(df2_vegold, df2_veg)
 
 # edit column names
 # remove entries for 'Distichlis spicata' because we don't have it in plots
