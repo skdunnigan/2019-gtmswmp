@@ -10,20 +10,20 @@ df_veg <- readxl::read_xlsx(here::here('data', '2019VEG_raw.xlsx')) %>%
 # make subplot a character
 
 df2_veg <- df_veg %>%
-  dplyr::rename(canopy_height_cm = canopy_height_15,
-                canopy_height_m = canopy_height_16) %>%
+  dplyr::rename(canopy_height_cm = canopy_height_16,
+                canopy_height_m = canopy_height_17) %>%
   dplyr::mutate(percent_cover_cal = NA,
                 date = lubridate::date(date),
                 year = lubridate::year(date),
                 month = lubridate::month(date),
                 season = ifelse(month >4, "Fall", "Spring"),
                 season = factor(season, levels = c("Spring", "Fall")),
-                site_id = factor(site_id, levels = c("40", 
-                                                     "00", 
-                                                     "22", 
-                                                     "06", 
-                                                     "46", 
-                                                     "01")),
+                site_name = factor(site_name, levels = c("PI", 
+                                                         "HI", 
+                                                         "EC", 
+                                                         "MC", 
+                                                         "PC", 
+                                                         "WO")),
                 subplot = as.character(subplot))
 
 # ----------------------------read in previous data 2012-2018
@@ -44,15 +44,16 @@ df2_vegold <- df_vegold %>%
                 reserve = "GTM",
                 type = "E",
                 date = as.Date(date, "%m/%e/%Y"),
-                year = lubridate::year(date),
+                year = as.numeric(year),
                 month = lubridate::month(date),
                 season = factor(season, levels = c("Spring", "Fall")),
-                site_id = factor(site_id, levels = c("40", 
-                                                     "00", 
-                                                     "22", 
-                                                     "06", 
-                                                     "46", 
-                                                     "01")),
+                site_name = factor(site_name, levels = c("PI", 
+                                                         "HI", 
+                                                         "EC", 
+                                                         "MC", 
+                                                         "PC", 
+                                                         "WO")),
+                site_id = as.character(site_id),
                 subplot = as.character(subplot))
 
 # -----------re-class multiple columns in both data frames to numeric
@@ -79,23 +80,23 @@ df2_veg_all <- df_veg_all %>%
 # ---------for comparing with SWMP water quality data and for grouping as such
 # create column that groups sites based on proximity to SWMP WQ stations
 # first make vectors for each site
-gtmpiwq <- c("40", "00")
-gtmsswq <- c("22", NA)
-gtmfmwq <- c("01", "06")
-gtmpcwq <- c("46", NA)
+gtmpiwq <- c("PI", "HI")
+gtmsswq <- c("EC", NA)
+gtmfmwq <- c("WO", "MC")
+gtmpcwq <- c("PC", NA)
 
 # bind the vectors into a data frame
 swmp_wq <- bind_cols("gtmpiwq" = gtmpiwq, 
                      "gtmsswq" = gtmsswq,
                      "gtmfmwq" = gtmfmwq,
                      "gtmpcwq" = gtmpcwq) %>%
-  gather(key = "station_name", value = "site_id")
+  gather(key = "station_name", value = "site_name")
 
 # remove the vectors, we don't need them
 rm(gtmpiwq, gtmsswq, gtmfmwq, gtmpcwq)
 
 # merge site names with dataframe
-df3_veg_all <- merge(df2_veg_all, swmp_wq, by="site_id", all.x=TRUE) %>%
+df3_veg_all <- merge(df2_veg_all, swmp_wq, by="site_name", all.x=TRUE) %>%
   dplyr::mutate(station_name <- factor(station_name, 
                                        levels = c("gtmpiwq", 
                                                   "gtmsswq", 
