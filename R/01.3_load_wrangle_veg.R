@@ -58,10 +58,14 @@ df2_vegold <- df_vegold %>%
 
 # -----------re-class multiple columns in both data frames to numeric
 
-cols.num <- c("percent_cover", "percent_cover_cal", "elevation", "plot_id",
-              "canopy_height_cm", "canopy_height_m", "density_raw", "density_adj",
-              "lg_burrow_raw", "lg_burrow_adj", "sm_burrow_raw", 
-              "sm_burrow_adj", "diameter", "height")
+cols.num <- c("percent_cover", "percent_cover_cal", 
+              "elevation", "plot_id",
+              "canopy_height_cm", "canopy_height_m", 
+              "density_raw", "density_adj",
+              "lg_burrow_raw", "lg_burrow_adj", 
+              "sm_burrow_raw", "sm_burrow_adj", 
+              "diameter", "height")
+
 df2_veg[cols.num] <- sapply(df2_veg[cols.num], as.numeric)
 df2_vegold[cols.num] <- sapply(df2_vegold[cols.num], as.numeric)
 
