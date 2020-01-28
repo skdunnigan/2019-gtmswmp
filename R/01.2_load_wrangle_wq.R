@@ -40,4 +40,4 @@ df_wq <- dplyr::bind_rows(df_wq_pi,
 # remove individual stations df ---- cleanup
 rm(df_wq_pi, df_wq_ss, df_wq_fm, df_wq_pc)
 
-beep(11) # sound alert
+beep() # sound alert
