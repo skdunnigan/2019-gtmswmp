@@ -13,33 +13,38 @@ timeseries_avg <- df_wq %>%
   mutate(tempF = convert_c_to_f(temp)) %>%
   summarise(timeseries_avg = mean(tempF, na.rm = TRUE))
 
+# pull out longterm average value
 ts_avg <- timeseries_avg[[1,1]]
 
-yr_min_max <- df_wq %>%
+# create dataframe that is filtered and mutated properly
+temp_wq <- df_wq %>%
   filter(station_name == x) %>%
   select(year, temp) %>%
-  mutate(tempF = convert_c_to_f(temp)) %>%
+  mutate(tempF = convert_c_to_f(temp))
+
+yr_min_max <- temp_wq %>%
   group_by(year) %>%
   summarise(min_temp_yr = min(tempF, na.rm = TRUE),
             max_temp_yr = max(tempF, na.rm = TRUE)) %>%
   ungroup() %>%
   summarise(timeseries_min_avg = mean(min_temp_yr),
-            timeseries_max_avg = mean(max_temp_yr))
+            timeseries_max_avg = mean(max_temp_yr)) %>%
+  ungroup()
 
+# pull out average minimum recorded temperatures
+# pull out average maximum recorded temperatures
 ts_min_avg <- yr_min_max[[1,1]]
 ts_max_avg <- yr_min_max[[1,2]]
 
-yr_mins_maxs_means <- df_wq %>%
-  filter(station_name == x) %>%
-  select(year, temp) %>%
+# pull out minimum, maximum and calculate average temp for each year
+yr_mins_maxs_means <- temp_wq %>%
   group_by(year) %>%
-  mutate(tempF = convert_c_to_f(temp)) %>%
   summarise(min_temp_yr = min(tempF, na.rm = TRUE),
             max_temp_yr = max(tempF, na.rm = TRUE),
-            mean_temp_yr = mean(tempF, na.rm = TRUE)) 
+            mean_temp_yr = mean(tempF, na.rm = TRUE)) %>%
+  ungroup()
 
-print(yr_mins_maxs_means)
-
+# plot
 a <- yr_mins_maxs_means %>%
   ggplot(aes(x = year)) +
   geom_point(aes(y = min_temp_yr, color = "minimum"), size= 2) +
@@ -59,25 +64,24 @@ a <- yr_mins_maxs_means %>%
                        round(ts_avg, 1), 'and an average minimum of', 
                        round(ts_min_avg,1), 'and maximum of', 
                        round(ts_max_avg,1)))
-print(a)
 
-min_under <- df_wq %>%
-  filter(station_name == x) %>%
-  select(year, temp) %>%
-  mutate(tempF = convert_c_to_f(temp)) %>%
+
+min_under <- temp_wq %>%
   group_by(year) %>%
   filter(tempF < ts_min_avg) %>%
-  count(name = "no_under_min")
+  count(name = "no_under_min") %>%
+  ungroup()
 
-max_over <- df_wq %>%
-  filter(station_name == x) %>%
-  select(year, temp) %>%
-  mutate(tempF = convert_c_to_f(temp)) %>%
+max_over <- temp_wq %>%
   group_by(year) %>%
   filter(tempF > ts_max_avg) %>%
-  count(name = "no_over_max") 
+  count(name = "no_over_max") %>%
+  ungroup() 
 
+print(yr_min_max)
+print(yr_mins_maxs_means)
 print(full_join(min_under, max_over) %>% arrange(desc(year)))
+print(a)
 
 }
 
