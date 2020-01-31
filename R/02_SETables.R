@@ -69,39 +69,33 @@ SET.2 <- SET %>%
                                        "PC",
                                        "WO"))) 
 
-  
+levels(SET.1$season) <- gsub(" ", "\n", levels(SET.1$season))  # force a break between the season and year for better axis label
+
 SET.1 %>%  
   group_by(season, site_name) %>%
   summarise(ht = mean(height_adj),
             se = se(height_adj)) %>%
   ggplot(aes(season, ht, group = site_name, colour = site_name)) + 
     geom_line(size = 1) +
-    geom_point() +
-    ylim(150, 300) +
+    geom_point(size = 3) +
+    ylim(150, 280) +
     geom_errorbar(mapping = aes(x = season, ymin = ht-se, ymax = ht+se, width = 0.3)) +
-    geom_smooth(method = "lm", fill = NA, linetype = 2, size=1) +
+    geom_smooth(method = "lm", fill = NA, linetype = 3, size=1) +
     stat_regline_equation(
-      aes(label = paste(..eq.label.., ..rr.label.., sep = "~`, `~")),
-      label.y.npc = 1) +
-      #scale_color_manual() +
-    theme_classic()
-
-SET.2 %>%  
-  group_by(season, year, site_name) %>%
-  summarise(ht = mean(height_adj),
-            se = se(height_adj)) %>%
-  ggplot(aes(season, ht, group = site_name, colour = site_name)) + 
-  geom_line(size = 1) +
-  geom_point() +
-  facet_grid(.~year, scales = "fixed", switch = "x") +
-  ylim(150, 300) +
-  geom_errorbar(mapping = aes(x = season, ymin = ht-se, ymax = ht+se, width = 0.3)) +
-  geom_smooth(method = "lm", fill = NA, linetype = 2, size=1) +
-  stat_regline_equation(
-    aes(label = paste(..eq.label.., ..rr.label.., sep = "~`, `~")),
-    label.y.npc = 1) +
-  #scale_color_manual() +
-  theme_classic()
+        aes(label = paste(..eq.label.., ..rr.label.., sep = "~`, `~")),
+        label.y.npc = 1) +
+    theme_cowplot() +
+    scale_color_discrete(name = "Site") +
+    # scale_color_brewer(name = "Site", palette = 'Set1') +
+    labs(x = '',
+         y = 'Mean Height (mm)') +
+  theme(legend.position = "top") +
+  guides(col = guide_legend(nrow = 1))
+ggsave(here::here('output', 'SETall.png'), 
+       units = "in", 
+       height = 5, 
+       width = 8, 
+       dpi = 300)
 
 # to just map sites, use function and select site: PI, HI, EC, MC, PC, WO
 site_set <- function (x) {
