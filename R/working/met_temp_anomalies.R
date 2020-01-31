@@ -7,7 +7,7 @@ convert_c_to_f <- function(x) {
 temp_anomaly_GTM_met <- function(type) {
   
   df_adjust <- df_met %>%
-    dplyr::filter(year >= 2007) %>%
+    # dplyr::filter(year >= 2007) %>%
     dplyr::select(year, atemp) %>%
     dplyr::group_by(year) %>%
     dplyr::mutate(tempF = convert_c_to_f(atemp))
@@ -26,7 +26,7 @@ temp_anomaly_GTM_met <- function(type) {
                     anomaly = min_temp_yr - timeseries_min_avg,
                     dev = ifelse(anomaly > 0, "Warmer", "Colder"))
     
-    ggpubr::ggbarplot(yr_mins, x = "year", y = "anomaly",
+a <-  ggpubr::ggbarplot(yr_mins, x = "year", y = "anomaly",
                       fill = "dev",
                       color = "dev",
                       palette = c("#00AFBB", "#E7B800"),
@@ -43,6 +43,9 @@ temp_anomaly_GTM_met <- function(type) {
       theme_cowplot() +
       theme(legend.position = "none")
     
+print(yr_mins)
+print(a)
+    
   } else if (type == "max") {
     
     yr_max <- df_adjust %>%
@@ -58,7 +61,7 @@ temp_anomaly_GTM_met <- function(type) {
     
     timeseries_max_avg <- timeseries_max_avg[[1,1]]
     
-    ggpubr::ggbarplot(yr_max, x = "year", y = "anomaly",
+a <- ggpubr::ggbarplot(yr_max, x = "year", y = "anomaly",
                       fill = "dev",
                       color = "dev",
                       palette = c("#00AFBB", "#E7B800"),
@@ -71,8 +74,17 @@ temp_anomaly_GTM_met <- function(type) {
       labs(x = '',
            y = 'Temperature ('~degree*F*') difference',
            title = "Temperature anomaly from average maximum",
-           caption = paste('Data from gtmpcmet 2007-2019: averagee maximum temperature was', round(timeseries_max_avg, 1), '°F')) +
+           caption = paste('Data from gtmpcmet 2007-2019: average maximum temperature was', round(timeseries_max_avg, 1), '°F')) +
       theme_cowplot() +
       theme(legend.position = "none")
+    
+print(yr_max)
+print(a)
   }
 }
+
+# a <- temp_anomaly_GTM_met(type = "min")
+# ggsave(here::here('output', 'visuals', '2020-01-31_mintempdiff.png'), 
+#        height = 5,
+#        width = 8,
+#        dpi = 300)
