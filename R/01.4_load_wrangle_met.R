@@ -3,7 +3,7 @@ df_met <- SWMPr::import_local(here::here('data', '13394.zip'), 'gtmpcmet')
 
 # qaqc and remove bad values
 df2_met <- df_met %>%
-  SWMPr::qaqc(qaqc_keep = c('0', '1', '4', '5')) 
+  SWMPr::qaqc(qaqc_keep = c('0', '4', '5')) 
 
 
 # merge all the files into one dataframe
