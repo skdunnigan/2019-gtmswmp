@@ -4,3 +4,6 @@
 .Ruserdata
 *.zip
 data/
+*.docx
+literature/
+*.png
