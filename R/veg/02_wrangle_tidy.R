@@ -46,7 +46,7 @@ dat_veg <- dat_veg %>%
   dplyr::mutate(date = lubridate::date(date),
                 year = lubridate::year(date),
                 month = lubridate::month(date),
-                season = ifelse(month >4, "Fall", "Spring"),
+                season = ifelse(month > 4, "Fall", "Spring"),
                 season = factor(season, levels = c("Spring", "Fall")))
 
 # ----04 create dataframe for veg data of only the platform plots (1-5)----
