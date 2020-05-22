@@ -83,8 +83,60 @@ print(a)
   }
 }
 
-# a <- temp_anomaly_GTM_met(type = "min")
-# ggsave(here::here('output', 'visuals', '2020-01-31_mintempdiff.png'), 
+####################################################
+# redo of SotR article figure
+
+df_adjust <- df_met %>%
+  # dplyr::filter(year >= 2007) %>%
+  dplyr::select(year, atemp) %>%
+  dplyr::group_by(year) %>%
+  dplyr::mutate(tempF = convert_c_to_f(atemp))
+
+
+  timeseries_min_avg <- df_adjust %>%
+    dplyr::summarise(min_temp_yr = min(tempF, na.rm = TRUE)) %>%
+    dplyr::ungroup() %>%
+    dplyr::summarise(timeseries_min_avg = mean(min_temp_yr))
+  
+  timeseries_min_avg <- timeseries_min_avg[[1,1]]
+  
+  yr_mins <- df_adjust %>%
+    dplyr::summarise(min_temp_yr = min(tempF, na.rm = TRUE)) %>%
+    dplyr::mutate(timeseries_min_avg = mean(min_temp_yr),
+                  anomaly = min_temp_yr - timeseries_min_avg,
+                  dev = ifelse(anomaly > 0, "Warmer", "Colder"))
+
+ 
+  ggplot(data = yr_mins, aes(x = year, y = anomaly)) +
+    geom_col(aes(fill = dev), 
+             show.legend = TRUE) +
+    # geom_text(aes(label = round(anomaly, 1)), vjust = -1, size = 5) +
+    geom_smooth(method = "lm", se = FALSE, color = "black", linetype = 2) +
+    stat_regline_equation() +
+    stat_cor(
+      aes(label = paste(..rr.label.., ..p.label.., sep = "~`, `~")), label.y = 5.5) +
+    geom_hline(yintercept = 0, linetype = 2, color = "lightgray") +
+    labs(x = '',
+         y = 'Temperature ('~degree*F*') difference') +
+    theme_cowplot() +
+    theme(legend.position = "none") +
+    scale_fill_manual(values = c("#00AFBB", "#E7B800")) +
+    scale_x_continuous(breaks = c(2005:2019)) +
+    ylim(-5,6.5) +
+    ggsave(here::here('output', 'visuals', '2020-02-10_mintempdiff_line.png'),
+         height = 5,
+         width = 8,
+         units = "in",
+         dpi = 300)
+    
+  
+  
+  
+  
+  
+   
+# ggsave(here::here('output', 'visuals', '2020-01-31_mintempdiff.png'),
 #        height = 5,
 #        width = 8,
+#        units = "in",
 #        dpi = 300)
