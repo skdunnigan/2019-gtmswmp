@@ -6,15 +6,19 @@ output:
   html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(dpi = 120)
 knitr::opts_chunk$set(fig.align = "center")
+```
+
+```{r veg-loading, include = FALSE}
 source(here::here('R', '00_loadpackages.R')) # load package libraries----
 source(here::here('R', 'veg', '00_visuals.R')) # load defined visual palettes----
 source(here::here('R', 'veg', '01_load.R')) # load vegetation data----
 source(here::here('R', 'veg', '02_wrangle_tidy.R')) # wrangle and tidy veg data----
 ```
+
 
 # Characterization of all sites 
 
@@ -83,39 +87,8 @@ dat_veg_all %>%
 ```
 
 
-
 ```{r percentcover-season-year-function, include = FALSE}
-pct_cov_2019vs <- function(season_int) {
-
-dat_veg_all %>%
-  dplyr::mutate(interestYR = ifelse(year < 2019, "2012-2018", "2019")) %>%
-  dplyr::filter(season == season_int) %>%
-  dplyr::group_by(interestYR, site_name, species) %>%
-  dplyr::summarise(mean_pc = mean(percent_cover, na.rm = TRUE)) %>%
-  ggplot() +
-  geom_bar(aes(x = "", y = mean_pc, fill = species), 
-           color = "white", 
-           width = 1, 
-           stat = "identity",
-           position = "fill") +
-  coord_polar("y", start = 0) +
-  facet_grid(interestYR ~ site_name) + 
-    scale_fill_manual(name = "Species",
-                      values = speciescolours_all, 
-                      labels = expression(italic('Avicennia germinans'), # this allows you to have italicized species names in legend, but not italicize Unvegetated
-                                          italic('Batis maritima'),
-                                          italic('Distichlis spicata'),
-                                          italic('Juncus roemerianus'),
-                                          italic('Salicornia ambigua'),
-                                          italic('Spartina alterniflora'),
-                                          'Unvegetated')
-    ) +
-  theme_void() +
-  theme(legend.position = "top",
-        legend.text.align = 0) +
-  labs(title = paste(season_int, "Season"))
-
-}
+source(here::here('R', 'veg', 'percent_cover_season_year_fxn.R'))
 ```
 
 ## Spring
@@ -128,4 +101,143 @@ pct_cov_2019vs(season_int = "Spring")
 
 ```{r percent-cover-fall-year, echo = FALSE, fig.width = 8, fig.height = 4}
 pct_cov_2019vs(season_int = "Fall")
+
+rm(pct_cov_2019vs)
 ```
+
+# Change over time
+
+**SPECIAL NOTE: canopy heights for species not found in plot were reported as zeros between Fall 2013 - Spring 2016. We may need to remove those zeros from the dataset and rerun the figures.**
+
+
+## All sites
+
+```{r cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'cover_height_overtime.R'))
+print(cover)
+```
+
+```{r height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+print(height)
+rm(a,cover, height)
+```
+
+## Pine Island
+
+The northernmost site and one that is almost solely *Spartina alterniflora*
+
+```{r pi-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
+site_plot(site = "PI", parameter = "percent_cover")
+```
+
+```{r pi-height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
+site_plot(site = "PI", parameter = "canopy_height")
+```
+
+## Hat Island
+
+Located just south of the mouth of the Guana River, this site is predominately *Spartina alterniflora*, but one of the transects is situated around an ever-growing pool of water that has a large patch of *Batis maritima*.
+
+```{r hi-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
+site_plot(site = "HI", parameter = "percent_cover")
+```
+
+```{r hi-height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
+site_plot(site = "HI", parameter = "canopy_height")
+```
+
+## East Creek
+
+Mangroves are increasing in abundance and height at this site. Cover of *Spartina alterniflora* may also be influenced by the loss of marsh edge plots on two of the platforms and continued evidence of erosion along this same southern edge of the creek.
+
+```{r ec-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
+site_plot(site = "EC", parameter = "percent_cover")
+```
+
+```{r ec-height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
+site_plot(site = "EC", parameter = "canopy_height")
+```
+
+## Moses Creek
+
+Hurricane Matthew (Fall 2016) may have removed a lot of the sediment and dead vegetation and enabled a visible increase in percent cover of live *Spartina alterniflora* in this site. Also important to note that the marsh edge plots in Moses Creek have not been able to be sampled due to loss since 2014 (two) and final one in 2018.
+
+```{r mc-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
+site_plot(site = "MC", parameter = "percent_cover")
+```
+
+```{r mc-height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
+site_plot(site = "MC", parameter = "canopy_height")
+```
+
+## Pellicer Creek
+
+One of the original "NERRS" transects, this site was abandoned after clear evidence that *Juncus roemarianus* was frequently damaged and slow to recovery after sampling efforts via walking the transect. This information was used in the planning of the Sentinel Site module in Pellicer Creek in 2016 and permanent platforms were constructed from shore to upland. The Fall 2016 survey was conducted after Hurricane Matthew, which may have caused lots of erosion of sediments, plus there is evidence that the [marsh swelled](https://nerrdsonthewater.com/2017/02/01/our-stationgrew/). Could this have had an impact on the heights of *Juncus* that were observed in Fall 2016?
+
+```{r pc-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
+site_plot(site = "PC", parameter = "percent_cover")
+```
+
+```{r pc-height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
+site_plot(site = "PC", parameter = "canopy_height")
+```
+
+## Washington Oaks
+
+The southernmost site of the GTM Research Reserve's long-term marsh monitoring and also is the site with the most diversity in species. Since Spring 2019, it has also been noted that there are red mangroves (*Rhizophora mangle*) growing just outside of the sampling plots. 
+
+```{r wo-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
+site_plot(site = "WO", parameter = "percent_cover")
+```
+
+```{r wo-height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
+site_plot(site = "WO", parameter = "canopy_height")
+```
+
+# Erosion of edge plots
+
+A decline in the ability to sample the plots along the marsh edge has been evident since 2014. This has progressed to a reduction of 12.2% in the total plots that are sampled each year (n = 90). Some of the plots have been lost, especially in the East Creek and Moses Creek sites, while others have simply become mud flats. These mudflats do not necessarily mean the plot is unsampleable, however. The Pellicer Creek site is the best example where almost all of the marsh edge plots are still there, but they no longer have any vegetation in them. 
+
+```{r sampleable-plots, echo = FALSE, fig.width = 6, fig.height = 4}
+
+dat_plots <- readxl::read_xlsx(here::here('data', 'VEG', 'sampleable-plots.xlsx')) %>%
+  janitor::clean_names()
+
+dat_plots %>%
+  ggplot(aes(x = year, y = prop_of_plots)) +
+  geom_bar(aes(fill = sampled), 
+           width = 0.5, 
+           stat = "identity",
+           position = "fill") +
+  scale_fill_manual(name = "",
+                    values = c('darkturquoise', 'darkorange')) +
+  scale_x_continuous(breaks = c(2012, 
+                                2013,
+                                2014,
+                                2015,
+                                2016,
+                                2017,
+                                2018,
+                                2019)) +
+  scale_y_continuous(labels = scales::percent) +
+  theme_classic() +
+  theme(legend.position = "top",
+        text = element_text(size = 14, color = "black"),
+        axis.text = element_text(color = "black")) +
+  labs(x = "Year",
+       y = "Percentage of Plots")
+
+```
+
