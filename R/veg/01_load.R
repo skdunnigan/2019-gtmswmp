@@ -78,5 +78,3 @@ dat_veg <- dplyr::bind_rows(dat_veg_old, dat_veg_new)
 
 # clean up environment 
 rm(dat_veg_old, dat_veg_new, cols.num, cols.char, read_function)
-
-beepr::beep()
