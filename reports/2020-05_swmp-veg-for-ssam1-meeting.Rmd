@@ -9,6 +9,7 @@ output:
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(dpi = 120)
+knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(fig.align = "center")
 ```
 
@@ -112,12 +113,12 @@ rm(pct_cov_2019vs)
 
 ## All sites
 
-```{r cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r cover-overtime, echo = FALSE, fig.width = 8, fig.height = 5}
 source(here::here('R', 'veg', 'cover_height_overtime.R'))
 print(cover)
 ```
 
-```{r height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r height-overtime, echo = FALSE, fig.width = 8, fig.height = 5}
 print(height)
 rm(a,cover, height)
 ```
@@ -126,12 +127,12 @@ rm(a,cover, height)
 
 The northernmost site and one that is almost solely *Spartina alterniflora*
 
-```{r pi-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r pi-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 5}
 source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
 site_plot(site = "PI", parameter = "percent_cover")
 ```
 
-```{r pi-height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r pi-height-overtime, echo = FALSE, fig.width = 8, fig.height = 5}
 source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
 site_plot(site = "PI", parameter = "canopy_height")
 ```
@@ -140,12 +141,12 @@ site_plot(site = "PI", parameter = "canopy_height")
 
 Located just south of the mouth of the Guana River, this site is predominately *Spartina alterniflora*, but one of the transects is situated around an ever-growing pool of water that has a large patch of *Batis maritima*.
 
-```{r hi-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r hi-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 5}
 source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
 site_plot(site = "HI", parameter = "percent_cover")
 ```
 
-```{r hi-height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r hi-height-overtime, echo = FALSE, fig.width = 8, fig.height = 5}
 source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
 site_plot(site = "HI", parameter = "canopy_height")
 ```
@@ -154,12 +155,12 @@ site_plot(site = "HI", parameter = "canopy_height")
 
 Mangroves are increasing in abundance and height at this site. Cover of *Spartina alterniflora* may also be influenced by the loss of marsh edge plots on two of the platforms and continued evidence of erosion along this same southern edge of the creek.
 
-```{r ec-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r ec-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 5}
 source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
 site_plot(site = "EC", parameter = "percent_cover")
 ```
 
-```{r ec-height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r ec-height-overtime, echo = FALSE, fig.width = 8, fig.height = 5}
 source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
 site_plot(site = "EC", parameter = "canopy_height")
 ```
@@ -168,12 +169,12 @@ site_plot(site = "EC", parameter = "canopy_height")
 
 Hurricane Matthew (Fall 2016) may have removed a lot of the sediment and dead vegetation and enabled a visible increase in percent cover of live *Spartina alterniflora* in this site. Also important to note that the marsh edge plots in Moses Creek have not been able to be sampled due to loss since 2014 (two) and final one in 2018.
 
-```{r mc-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r mc-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 5}
 source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
 site_plot(site = "MC", parameter = "percent_cover")
 ```
 
-```{r mc-height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r mc-height-overtime, echo = FALSE, fig.width = 8, fig.height = 5}
 source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
 site_plot(site = "MC", parameter = "canopy_height")
 ```
@@ -182,12 +183,12 @@ site_plot(site = "MC", parameter = "canopy_height")
 
 One of the original "NERRS" transects, this site was abandoned after clear evidence that *Juncus roemarianus* was frequently damaged and slow to recovery after sampling efforts via walking the transect. This information was used in the planning of the Sentinel Site module in Pellicer Creek in 2016 and permanent platforms were constructed from shore to upland. The Fall 2016 survey was conducted after Hurricane Matthew, which may have caused lots of erosion of sediments, plus there is evidence that the [marsh swelled](https://nerrdsonthewater.com/2017/02/01/our-stationgrew/). Could this have had an impact on the heights of *Juncus* that were observed in Fall 2016?
 
-```{r pc-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r pc-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 5}
 source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
 site_plot(site = "PC", parameter = "percent_cover")
 ```
 
-```{r pc-height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r pc-height-overtime, echo = FALSE, fig.width = 8, fig.height = 5}
 source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
 site_plot(site = "PC", parameter = "canopy_height")
 ```
@@ -196,12 +197,12 @@ site_plot(site = "PC", parameter = "canopy_height")
 
 The southernmost site of the GTM Research Reserve's long-term marsh monitoring and also is the site with the most diversity in species. Since Spring 2019, it has also been noted that there are red mangroves (*Rhizophora mangle*) growing just outside of the sampling plots. 
 
-```{r wo-cover-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r wo-cover-overtime, echo = FALSE}
 source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
 site_plot(site = "WO", parameter = "percent_cover")
 ```
 
-```{r wo-height-overtime, echo = FALSE, fig.width = 8, fig.height = 4}
+```{r wo-height-overtime, echo = FALSE}
 source(here::here('R', 'veg', 'site_cover_height_plot_fxn.R'))
 site_plot(site = "WO", parameter = "canopy_height")
 ```
