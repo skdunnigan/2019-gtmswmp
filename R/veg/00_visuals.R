@@ -15,7 +15,9 @@ speciescolours_all <- c(
   `Batis maritima` = "#a9b645",
   `Distichlis spicata` = "#1e7834",
   `Juncus roemerianus` = "#a4a4a6",
+  # `Morella cerifera` = 'darkturquoise',
   `Salicornia ambigua` = "#f4c544",
+  `Serenoa repens` = "darkorchid",
   `Spartina alterniflora` = "#ce5c36",
   Unvegetated = "#325269",
   Unidentified = "#000000"
