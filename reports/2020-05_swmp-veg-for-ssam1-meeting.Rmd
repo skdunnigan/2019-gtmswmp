@@ -47,7 +47,7 @@ dat_veg_all %>%
                                         italic('Batis maritima'),
                                         italic('Distichlis spicata'),
                                         italic('Juncus roemerianus'),
-                                        italic('Salicornia ambigua'),
+                                        italic('Sarcocornia perennis'),
                                         italic('Spartina alterniflora'),
                                         'Unvegetated')
                     ) +
@@ -78,7 +78,7 @@ dat_veg_all %>%
                                         italic('Batis maritima'),
                                         italic('Distichlis spicata'),
                                         italic('Juncus roemerianus'),
-                                        italic('Salicornia ambigua'),
+                                        italic('Sarcocornia perennis'),
                                         italic('Spartina alterniflora'),
                                         'Unvegetated')
                     ) +
@@ -108,7 +108,7 @@ rm(pct_cov_2019vs)
 
 # Change over time
 
-**SPECIAL NOTE: canopy heights for species not found in plot were reported as zeros between Fall 2013 - Spring 2016. We may need to remove those zeros from the dataset and rerun the figures.**
+**SPECIAL NOTE**: canopy heights for species not found in plot were reported as zeros between Fall 2013 - Spring 2016. We may need to remove those zeros from the dataset and rerun the figures. Especially since (as is the case of Pine Island) canopy height is reported as zero for "Unvegetated".
 
 
 ## All sites
@@ -242,3 +242,209 @@ dat_plots %>%
 
 ```
 
+# LONG TRANSECTS (Shore-to-Upland) in Moses Creek
+
+The full transects were sampled in 2012, 2015, and 2019. For these first graphs, I averaged all three of the long transects together for each year. 
+
+```{r moses-calc}
+se <- function(x) {
+  sd(x, na.rm = TRUE)/sqrt(length(x))
+}
+
+# all three transects averaged together ----
+
+moses <- dat_veg_moses %>%
+  dplyr::filter(!plot_id %in% c(4,5)) %>% # remove plots 4 & 5 since they are replicates of 2 & 3
+  dplyr::filter(canopy_height <= 3) %>% # appears to be a typo in canopy height in the 2019 data for Juncus on plot 12, so I removed the super large value from the analysis.
+  dplyr::group_by(year, species, plot_id) %>%
+  dplyr::summarise(mean_cover = mean(percent_cover, na.rm = TRUE),
+                   se_cover = se(percent_cover),
+                   mean_ht = mean(canopy_height, na.rm = TRUE),
+                   se_ht = se(canopy_height))
+```
+
+### Percent Cover
+
+```{r moses-alltransects-coverplot, echo = FALSE}
+moses %>%
+  ggplot(aes(x = plot_id, y = mean_cover, group = species, color = species)) +
+  geom_point(size = 3) +
+  geom_line(size = 1) +
+  geom_errorbar(aes(ymin = mean_cover-se_cover, ymax = mean_cover+se_cover, width = 0.3)) +
+  facet_grid(year~., switch = "y") +
+  scale_x_continuous(breaks = c(1:3, 6:20)) +
+  scale_color_manual(name = "Species",
+                     values = speciescolours_all,
+                     labels = expression(italic('Avicennia germinans'), # this allows you to have italicized species names in legend, but not italicize Unvegetated
+                                         italic('Batis maritima'),
+                                         italic('Distichlis spicata'),
+                                         italic('Juncus roemerianus'),
+                                         italic('Salicornia ambigua'),
+                                         italic('Serenoa repens'),
+                                         italic('Spartina alterniflora'),
+                                         'Unidentified',
+                                         'Unvegetated')
+  ) +
+  theme_classic() +
+  theme(strip.placement = "outside",
+        legend.text.align = 0,
+        strip.background = element_rect(fill = NULL, 
+                                        color = "white"),
+        strip.text = element_text(size = 16),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 14)) +
+  labs(x = "Plot",
+       y = "Mean Cover (%)")
+```
+
+### Canopy Height
+
+```{r moses-alltransects-htplot, echo = FALSE}
+moses %>%
+  dplyr::filter(species != "Unvegetated") %>% # remove the unvegetated values (which were reported as zero in 2015)
+  ggplot(aes(x = plot_id, y = mean_ht, group = species, color = species)) +
+  geom_point(size = 3) +
+  geom_line(size = 1) +
+  geom_errorbar(aes(ymin = mean_ht-se_ht, ymax = mean_ht+se_ht, width = 0.3)) +
+  facet_grid(year~., switch = "y") +
+  scale_x_continuous(breaks = c(1:3, 6:20)) +
+  scale_color_manual(name = "Species",
+                     values = speciescolours_all,
+                     labels = expression(italic('Avicennia germinans'), # this allows you to have italicized species names in legend, but not italicize Unvegetated
+                                         italic('Batis maritima'),
+                                         italic('Distichlis spicata'),
+                                         italic('Juncus roemerianus'),
+                                         italic('Sarcocornia perennis'),
+                                         italic('Serenoa repens'),
+                                         italic('Spartina alterniflora'),
+                                         'Unidentified')
+  ) +
+  theme_classic() +
+  theme(strip.placement = "outside",
+        legend.text.align = 0,
+        strip.background = element_rect(fill = NULL, 
+                                        color = "white"),
+        strip.text = element_text(size = 16),
+        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 14)) +
+  labs(x = "Plot",
+       y = "Mean Height (m)")  
+
+```
+
+## Each single transect
+
+The transects have their own unique characteristics. Therefore, I have split them out individually below:
+
+```{r moses-individualtransect-calc-fxn}
+moses_transect <- dat_veg_moses %>%
+  dplyr::filter(!plot_id %in% c(4,5)) %>% # remove plots 4 & 5 since they are replicates of 2 & 3
+  dplyr::group_by(year, species, plot_id, transect_id)
+
+moses_transect <- function(transect, parameter) {
+  
+  moses_transect <- dat_veg_moses %>%
+    dplyr::filter(!plot_id %in% c(4,5)) %>% # remove plots 4 & 5 since they are replicates of 2 & 3
+    dplyr::group_by(year, species, plot_id, transect_id) %>%
+    dplyr::filter(transect_id == transect)
+  
+  if (parameter == "percent_cover") {
+    
+    moses_transect %>%
+      ggplot(aes(x = plot_id, y = percent_cover, group = species, color = species)) +
+      geom_point(size = 3) +
+      geom_line(size = 1) +
+      facet_grid(year~., switch = "y") +
+      scale_x_continuous(breaks = c(1:3, 6:20)) +
+      scale_color_manual(name = "Species",
+                         values = speciescolours_all,
+                         labels = expression(italic('Avicennia germinans'), # this allows you to have italicized species names in legend, but not italicize Unvegetated
+                                             italic('Batis maritima'),
+                                             italic('Distichlis spicata'),
+                                             italic('Juncus roemerianus'),
+                                             italic('Sarcocornia perennis'),
+                                             italic('Serenoa repens'),
+                                             italic('Spartina alterniflora'),
+                                             'Unidentified',
+                                             'Unvegetated')
+      ) +
+      theme_classic() +
+      theme(strip.placement = "outside",
+            legend.text.align = 0,
+            strip.background = element_rect(fill = NULL, 
+                                            color = "white"),
+            strip.text = element_text(size = 16),
+            axis.title = element_text(size = 14),
+            axis.text = element_text(size = 14)) +
+      labs(x = "Plot",
+           y = "Mean Cover (%)",
+           title = paste("Transect:",transect))
+    
+  } else if (parameter == "canopy_height") {
+    
+    moses_transect %>%
+      dplyr::filter(canopy_height <= 3 & species != "Unvegetated") %>% # remove the unvegetated values (which were reported as zero in 2015)
+      ggplot(aes(x = plot_id, y = canopy_height, group = species, color = species)) +
+      geom_point(size = 3) +
+      geom_line(size = 1) +
+      facet_grid(year~., switch = "y") +
+      scale_x_continuous(breaks = c(1:3, 6:20)) +
+      scale_color_manual(name = "Species",
+                         values = speciescolours_all,
+                         labels = expression(italic('Avicennia germinans'), # this allows you to have italicized species names in legend, but not italicize Unvegetated
+                                             italic('Batis maritima'),
+                                             italic('Distichlis spicata'),
+                                             italic('Juncus roemerianus'),
+                                             italic('Sarcocornia perennis'),
+                                             italic('Serenoa repens'),
+                                             italic('Spartina alterniflora'),
+                                             'Unidentified')
+      ) +
+      theme_classic() +
+      theme(strip.placement = "outside",
+            legend.text.align = 0,
+            strip.background = element_rect(fill = NULL, 
+                                            color = "white"),
+            strip.text = element_text(size = 16),
+            axis.title = element_text(size = 14),
+            axis.text = element_text(size = 14)) +
+      labs(x = "Plot",
+           y = "Mean Height (m)",
+           title = paste("Transect:",transect))
+    
+  }
+  
+  
+  
+}
+```
+
+### Transect B - the westernmost transect
+
+```{r moses-b-cover, echo = FALSE}
+moses_transect(transect = "B", parameter = "percent_cover")
+```
+
+```{r moses-b-ht, echo = FALSE}
+moses_transect(transect = "B", parameter = "canopy_height")
+```
+
+### Transect A - the middle transect
+
+```{r moses-a-cover, echo = FALSE}
+moses_transect(transect = "A", parameter = "percent_cover")
+```
+
+```{r moses-a-ht, echo = FALSE}
+moses_transect(transect = "A", parameter = "canopy_height")
+```
+
+### Transect C - the easternmost transect
+
+```{r moses-c-cover, echo = FALSE}
+moses_transect(transect = "C", parameter = "percent_cover")
+```
+
+```{r moses-c-ht, echo = FALSE}
+moses_transect(transect = "C", parameter = "canopy_height")
+```
