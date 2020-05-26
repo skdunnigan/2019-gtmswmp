@@ -2,9 +2,8 @@
 
 # ----01 species names continuity----
 # this is especially important for Sarcocornia since it has been renamed a few times
-# see this reference https://florida.plantatlas.usf.edu/Excluded.aspx?id=1187
-# full cit: Wunderlin, R. P., B. F. Hansen, A. R. Franck, and F. B. Essig. 2020. Atlas of Florida Plants (http://florida.plantatlas.usf.edu/). [S. M. Landry and K. N. Campbell (application development), USF Water Institute.] Institute for Systematic Botany, University of South Florida, Tampa.
-
+# see this reference https://plants.sc.egov.usda.gov/core/profile?symbol=SAPE11
+# and this reference https://itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=520732
 species_names <- tibble(
   species = c("Spartina alterniflora", "Batis maritima", 
               "Sarcocornia ambigua", "Sarcocornia perennis", 
@@ -12,7 +11,7 @@ species_names <- tibble(
               "Distichlis spicata", "Serenoa repens", 
               "Morella cerifera", "Unvegetated", "Unidentified"),
   species_names = c("Spartina alterniflora", "Batis maritima", 
-                    "Salicornia ambigua", "Salicornia ambigua", 
+                    "Sarcocornia perennis", "Sarcocornia perennis", 
                     "Avicennia germinans", "Juncus roemerianus", 
                     "Distichlis spicata", "Serenoa repens", 
                     "Morella cerifera", "Unvegetated", "Unidentified")

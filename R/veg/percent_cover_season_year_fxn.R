@@ -19,7 +19,7 @@ pct_cov_2019vs <- function(season_int) {
                                           italic('Batis maritima'),
                                           italic('Distichlis spicata'),
                                           italic('Juncus roemerianus'),
-                                          italic('Salicornia ambigua'),
+                                          italic('Sarcocornia perennis'),
                                           italic('Spartina alterniflora'),
                                           'Unvegetated')
     ) +

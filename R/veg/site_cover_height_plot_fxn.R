@@ -44,7 +44,7 @@ levels(a$year_season) <- gsub(" ", "\n", levels(a$year_season))  # force a break
                                                  italic('Batis maritima'),
                                                  italic('Distichlis spicata'),
                                                  italic('Juncus roemerianus'),
-                                                 italic('Salicornia ambigua'),
+                                                 italic('Sarcocornia perennis'),
                                                  italic('Spartina alterniflora'),
                                                  'Unvegetated')
           ) +
@@ -71,7 +71,7 @@ levels(a$year_season) <- gsub(" ", "\n", levels(a$year_season))  # force a break
                                            italic('Batis maritima'),
                                            italic('Distichlis spicata'),
                                            italic('Juncus roemerianus'),
-                                           italic('Salicornia ambigua'),
+                                           italic('Sarcocornia perennis'),
                                            italic('Spartina alterniflora'),
                                            'Unvegetated')
     ) +

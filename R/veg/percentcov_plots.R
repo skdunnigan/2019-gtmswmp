@@ -21,7 +21,7 @@ dat_veg_all %>%
                                         italic('Batis maritima'),
                                         italic('Distichlis spicata'),
                                         italic('Juncus roemerianus'),
-                                        italic('Salicornia ambigua'),
+                                        italic('Sarcocornia perennis'),
                                         italic('Spartina alterniflora'),
                                         'Unvegetated')
                     ) +
@@ -75,7 +75,7 @@ dat_veg_all %>%
                                         italic('Batis maritima'),
                                         italic('Distichlis spicata'),
                                         italic('Juncus roemerianus'),
-                                        italic('Salicornia ambigua'),
+                                        italic('Sarcocornia perennis'),
                                         italic('Spartina alterniflora'),
                                         'Unvegetated')
   ) +
@@ -107,7 +107,7 @@ dat_veg_all %>%
                                           italic('Batis maritima'),
                                           italic('Distichlis spicata'),
                                           italic('Juncus roemerianus'),
-                                          italic('Salicornia ambigua'),
+                                          italic('Sarcocornia perennis'),
                                           italic('Spartina alterniflora'),
                                           'Unvegetated')
     ) +

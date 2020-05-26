@@ -64,7 +64,7 @@ moses %>%
                                          italic('Batis maritima'),
                                          italic('Distichlis spicata'),
                                          italic('Juncus roemerianus'),
-                                         italic('Salicornia ambigua'),
+                                         italic('Sarcocornia perennis'),
                                          italic('Serenoa repens'),
                                          italic('Spartina alterniflora'),
                                          'Unidentified')
@@ -108,7 +108,7 @@ moses_transect <- function(transect, parameter) {
                                              italic('Batis maritima'),
                                              italic('Distichlis spicata'),
                                              italic('Juncus roemerianus'),
-                                             italic('Salicornia ambigua'),
+                                             italic('Sarcocornia perennis'),
                                              italic('Serenoa repens'),
                                              italic('Spartina alterniflora'),
                                              'Unidentified',
@@ -141,7 +141,7 @@ moses_transect <- function(transect, parameter) {
                                              italic('Batis maritima'),
                                              italic('Distichlis spicata'),
                                              italic('Juncus roemerianus'),
-                                             italic('Salicornia ambigua'),
+                                             italic('Sarcocornia perennis'),
                                              italic('Serenoa repens'),
                                              italic('Spartina alterniflora'),
                                              'Unidentified')

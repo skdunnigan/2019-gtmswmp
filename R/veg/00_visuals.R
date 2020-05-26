@@ -16,7 +16,7 @@ speciescolours_all <- c(
   `Distichlis spicata` = "#1e7834",
   `Juncus roemerianus` = "#a4a4a6",
   # `Morella cerifera` = 'darkturquoise',
-  `Salicornia ambigua` = "#f4c544",
+  `Sarcocornia perennis` = "#f4c544",
   `Serenoa repens` = "darkorchid",
   `Spartina alterniflora` = "#ce5c36",
   Unvegetated = "#325269",

@@ -38,7 +38,7 @@ cover <- ggplot(data = a, aes(x = year_season, y = mean_cover, group = species, 
                                          italic('Batis maritima'),
                                          italic('Distichlis spicata'),
                                          italic('Juncus roemerianus'),
-                                         italic('Salicornia ambigua'),
+                                         italic('Sarcocornia perennis'),
                                          italic('Spartina alterniflora'),
                                          'Unvegetated')
   ) +
@@ -59,7 +59,7 @@ height <- ggplot(data = a, aes(x = year_season, y = mean_ht, group = species, co
                                          italic('Batis maritima'),
                                          italic('Distichlis spicata'),
                                          italic('Juncus roemerianus'),
-                                         italic('Salicornia ambigua'),
+                                         italic('Sarcocornia perennis'),
                                          italic('Spartina alterniflora'),
                                          'Unvegetated')
   ) +
